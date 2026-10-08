@@ -1,0 +1,174 @@
+PuTTY — build and start after WinSCP upload
+
+This is step 3 of migration-package (see ../START-HERE.txt).
+Same steps are copied into 02-winscp-upload/SERVER-SETUP.txt after prepare.
+
+Requirements on the server:
+  - Node.js 22.x (Capacity engines field). Check: node -v
+  - npm (comes with Node)
+  - Network access from this host to MariaDB port 3306
+
+1. SSH to the application server.
+2. cd into the folder you uploaded (contents of 02-winscp-upload).
+
+   Example:
+     cd /var/www/Data_Quality_Tool
+
+3. Confirm MariaDB scripts already ran in SQLyog (in order):
+     001_initial_schema.sql
+     002_capacity_schema.sql
+     004_capacity_users_active.sql   ← required for login + User management
+     005_capacity_users_analyst.sql  ← required to assign Analyst role
+     006_capacity_clients.sql        ← clients table (MariaDB-backed clients)
+     007_capacity_documents.sql      ← planning data (plans, overrides, DBE)
+     008_capacity_audit_and_settings.sql ← admin activity trail + shared formulas
+     010_capacity_reporting_views.sql ← read-only views for checking data in SQL
+     003_capacity_demo_users.sql     ← demo logins (password: movate)
+
+   To confirm Capacity data is in MariaDB once people start using the app:
+     SELECT * FROM v_capacity_clients;   -- every client
+     SELECT * FROM v_capacity_storage;   -- what each planner has saved
+   The Capacity tables are capacity_clients and capacity_documents. There is no
+   table named clients, capacity_plans or client_teams in this application.
+
+   One script waits until after the build below:
+     009_drop_ai_assistant_column.sql ← run once the new build is serving traffic.
+     It removes users.ai_assistant_approved, which the previous build still names
+     when creating a user, so running it early breaks Add user until you restart.
+
+4. Create server env (ON THE SERVER — do not upload secrets from your PC):
+
+     cp .env.production.example .env.local
+     nano .env.local
+
+   Required values:
+     STANDALONE=false
+     DATA_BACKEND=mariadb
+     DB_HOST=<host the app server can reach — not SQLyog tunnel "localhost" unless DB is local>
+     DB_PORT=3306
+     DB_NAME=mis_ph_db
+     DB_USER=...
+     DB_PASSWORD=...
+     COOKIE_SECURE=false          # set true only if users open the app via https://
+
+   Do NOT copy .env.example for production — it defaults to STANDALONE=true (JSON mode).
+
+5. Make data folders writable:
+
+     chmod -R u+rwX data
+     # or chown to the user that runs Node/PM2
+
+6. Install and build:
+
+     # If you see 500 / Cannot find module './####.js', wipe cache first:
+     # rm -rf .next
+
+     npm install
+     npm run build
+
+   The Capacity embed is already built and included in the upload, so the server
+   does not rebuild it and does not need capacity's build tools. If you ever do
+   want to rebuild it here, run "npm install --prefix capacity" first.
+
+7. Start (listens on all interfaces, port 3000).
+
+   a) Quick test only — stops the moment you close PuTTY:
+
+     npm run start
+
+   b) RECOMMENDED for real use — survives logout and reboot:
+
+     sudo npm install -g pm2
+     pm2 start npm --name data-quality-tool -- start
+     pm2 save
+     pm2 startup          # then run the command it prints (enables boot start)
+
+   Useful later:
+     pm2 logs data-quality-tool
+     pm2 restart data-quality-tool     # after any redeploy
+     pm2 status
+
+   Open from another PC: http://<server-ip>:3000
+   (Allow firewall TCP 3000 if needed.)
+
+8. Smoke checks (from the server):
+
+     curl -s http://127.0.0.1:3000/api/config
+     curl -s http://127.0.0.1:3000/api/capacity/health
+
+   Expect mariadb + connected when .env.local is correct.
+
+   Confirm the running build is the new one (planning data -> capacity_documents,
+   NOT the old workspace_state blob):
+
+     curl -i -X PUT http://127.0.0.1:3000/api/capacity/workspace \
+       -H 'Content-Type: application/json' -d '{}'
+
+   Expect: HTTP/1.1 410 Gone  +  "code":"workspace_readonly"
+
+   410 means the new code is live and nothing can write workspace_state again.
+   Anything else (200 / 401 / 405) means the OLD build is still being served —
+   the upload did not take effect. Re-run step 6, then restart:
+     rm -rf .next && npm run build && pm2 restart data-quality-tool
+
+9. Behind Nginx? Use the supplied config, do not write one from scratch:
+
+     nginx-data-quality-tool.conf   (in this same 03-putty folder)
+
+   It sets the upload size, timeouts, forwarded headers and buffer sizes this
+   app needs. Install and apply it as described in the comments at the top,
+   then: sudo nginx -t && sudo systemctl reload nginx
+
+10. "502 Bad Gateway" — find the cause before changing anything.
+
+   502 always means the same thing: Nginx could not get a reply from the Node
+   app. It never means the database is wrong. Ask the app directly, bypassing
+   Nginx entirely:
+
+     curl -s http://127.0.0.1:3000/api/capacity/health
+
+   a) You get JSON back (any content, even "database":"missing_config")
+      -> The app is healthy and the problem is between Nginx and the app:
+
+         - Port mismatch. Compare PORT in .env.local with proxy_pass in the
+           Nginx config. They must be the same number. This is the usual cause.
+             grep PORT .env.local
+             grep proxy_pass /etc/nginx/conf.d/*.conf /etc/nginx/sites-enabled/*
+
+         - SELinux blocking the connection (RHEL/CentOS/Rocky). Nginx is not
+           allowed to open network sockets by default, so every proxy_pass fails:
+             sudo setsebool -P httpd_can_network_connect 1
+
+         - "upstream sent too big header" in the Nginx error log. Use the
+           proxy_buffer_size lines from the supplied config.
+
+      Check what Nginx itself recorded:
+             sudo tail -50 /var/log/nginx/error.log
+
+   b) curl fails / connection refused
+      -> The app is not running. It is not an Nginx problem.
+
+             pm2 status                        # is it "online" or restarting?
+             pm2 logs data-quality-tool --lines 50
+
+         Most often the build never completed, so there is nothing to serve.
+         Rebuild and restart:
+             rm -rf .next && npm run build && pm2 restart data-quality-tool
+
+         If the app keeps restarting, the port is already taken by something
+         else — find it and stop it, or change PORT in .env.local:
+             sudo ss -ltnp | grep 3000
+
+   Note the difference: a wrong database gives you a page with 503 errors on
+   it, never a 502. If you see 502, the app itself is unreachable.
+
+11. Capacity sign-in:
+     Demo: test@movate.com / movate (admin)
+     Then Capacity → Users to add/edit accounts (admin only).
+
+12. If Capacity sign-in fails on http:// (cookie not stored):
+     ensure COOKIE_SECURE=false (or unset) and restart the app.
+     Behind HTTPS-terminating Nginx, set COOKIE_SECURE=true instead.
+
+Optional script:
+  bash server-commands.sh /path/to/Data_Quality_Tool

@@ -1,0 +1,61 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const dashboardRoot = path.resolve(__dirname, '..')
+const repoRoot = path.resolve(dashboardRoot, '..')
+
+function parseEnv(file) {
+  const text = fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '')
+  const vars = {}
+  let currentKey = null
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim()
+    if (!line || line.startsWith('#')) continue
+    const eq = line.indexOf('=')
+    if (eq === -1) {
+      if (currentKey) vars[currentKey] += line
+      continue
+    }
+    currentKey = line.slice(0, eq)
+    vars[currentKey] = line.slice(eq + 1)
+  }
+  return vars
+}
+
+const rootEnvPath = path.join(repoRoot, '.env.local')
+const dashEnvPath = path.join(dashboardRoot, '.env.local')
+const root = fs.existsSync(rootEnvPath) ? parseEnv(rootEnvPath) : {}
+const dash = fs.existsSync(dashEnvPath) ? parseEnv(dashEnvPath) : {}
+
+const merged = {
+  DB_HOST: dash.DB_HOST || root.DB_HOST || '',
+  DB_PORT: dash.DB_PORT || root.DB_PORT || '3306',
+  DB_NAME: dash.DB_NAME || root.DB_NAME || '',
+  DB_USER: dash.DB_USER || root.DB_USER || '',
+  DB_PASSWORD: dash.DB_PASSWORD || root.DB_PASSWORD || '',
+  DB_POOL_SIZE: dash.DB_POOL_SIZE || root.DB_POOL_SIZE || '10',
+  VITE_API_BASE_URL: dash.VITE_API_BASE_URL || root.VITE_API_BASE_URL || '/api',
+  ROSTER_API_URL: dash.ROSTER_API_URL || root.ROSTER_API_URL || '',
+  ROSTER_API_KEY: dash.ROSTER_API_KEY || root.ROSTER_API_KEY || '',
+}
+
+const lines = [
+  '# MariaDB (same database as main Data Quality Tool)',
+  `DB_HOST=${merged.DB_HOST}`,
+  `DB_PORT=${merged.DB_PORT}`,
+  `DB_NAME=${merged.DB_NAME}`,
+  `DB_USER=${merged.DB_USER}`,
+  `DB_PASSWORD=${merged.DB_PASSWORD}`,
+  `DB_POOL_SIZE=${merged.DB_POOL_SIZE}`,
+  '',
+  `VITE_API_BASE_URL=${merged.VITE_API_BASE_URL}`,
+  `ROSTER_API_URL=${merged.ROSTER_API_URL}`,
+  `ROSTER_API_KEY=${merged.ROSTER_API_KEY}`,
+  '',
+]
+
+fs.writeFileSync(dashEnvPath, lines.join('\n'), { encoding: 'utf8' })
+console.log(`Wrote ${dashEnvPath}`)
+console.log(`MariaDB ${merged.DB_HOST && merged.DB_NAME ? 'configured' : 'missing — set DB_* in root .env.local'}`)

@@ -1,0 +1,1 @@
+function e(e){return e.lob?.trim()||e.location?.trim()||``}function t(e){return e.lob?.trim()&&e.location?.trim()||``}function n(e){return e.projectCode?.trim()||``}function r(e){return(e??``).trim().toUpperCase()}export{n as i,e as n,t as r,r as t};

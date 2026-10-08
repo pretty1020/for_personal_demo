@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream-50: #fffdf8;
+  --cream-100: #f6f0e3;
+  --navy-950: #070b14;
+  --navy-900: #0b1220;
+  --gold-300: #e3c565;
+  --gold-400: #d4af37;
+  --alert: #e5484d;
+  --good: #2f9e6a;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-cream-50 text-navy-950 antialiased;
+}
+
+.dark body {
+  @apply bg-navy-950 text-cream-100;
+}
+
+.glass {
+  @apply border border-white/10 bg-white/60 shadow-xl backdrop-blur dark:bg-navy-900/70;
+}

@@ -1,0 +1,376 @@
+/* Loaded with SchedulingPage so Tailwind preflight cannot hide these controls. */
+
+.sched-page .sched-results-card {
+  display: grid;
+  gap: 1rem;
+  margin: 0 0 1rem;
+  padding: 1.1rem 1.15rem 1.2rem;
+  border: 1px solid #dbe4ef;
+  border-radius: 16px;
+  background:
+    radial-gradient(900px 140px at 100% 0%, rgba(51, 183, 194, 0.12), transparent 50%),
+    radial-gradient(800px 160px at 0% 0%, rgba(35, 66, 142, 0.1), transparent 52%),
+    #fff;
+}
+
+.sched-page .sched-results-card .sched-draft-banner {
+  margin: 0;
+}
+
+.sched-page .sched-results-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.7rem;
+}
+
+.sched-page .sched-results-kpis .sched-kpi-card {
+  min-height: 96px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+.sched-page .sched-toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  padding-top: 0.15rem;
+}
+
+.sched-page .sched-toggle-hint {
+  margin: 0;
+  flex: 1 1 14rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.sched-page .sched-toggle-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.55rem;
+  padding: 0.55rem 1.15rem !important;
+  border-radius: 999px !important;
+  border-width: 2px !important;
+  font-size: 0.86rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none;
+}
+
+.sched-page .sched-toggle-btn--check {
+  color: #312e81 !important;
+  border-color: #4f46e5 !important;
+  background: #eef2ff !important;
+  box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.18), 0 6px 16px rgba(79, 70, 229, 0.16);
+}
+
+.sched-page .sched-toggle-btn--check:hover {
+  background: #e0e7ff !important;
+  color: #1e1b4b !important;
+}
+
+.sched-page .sched-toggle-btn--check.is-on,
+.sched-page .sched-toggle-btn--check[aria-pressed='true'] {
+  color: #fff !important;
+  border-color: #3730a3 !important;
+  background: #4f46e5 !important;
+}
+
+.sched-page .sched-toggle-btn--opt {
+  color: var(--cap-accent-mid, #002653) !important;
+  border-color: var(--cap-accent, #23428e) !important;
+  background: var(--cap-accent-soft, #edf3f7) !important;
+  box-shadow: 0 0 0 1px rgba(35, 66, 142, 0.18), 0 6px 16px rgba(35, 66, 142, 0.14);
+}
+
+.sched-page .sched-toggle-btn--opt:hover {
+  background: #dae6f2 !important;
+  color: #021d31 !important;
+}
+
+.sched-page .sched-toggle-btn--opt.is-on,
+.sched-page .sched-toggle-btn--opt[aria-pressed='true'] {
+  color: #fff !important;
+  border-color: var(--cap-accent-mid, #002653) !important;
+  background: var(--cap-accent, #23428e) !important;
+}
+
+.sched-page .sched-toggle-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sched-page .sched-diagnostics {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0 0 1rem;
+  padding: 1.15rem 1.2rem 1.25rem;
+  border: 1px solid #dbe4ef;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.sched-page .sched-diag-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-height: 84px;
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.sched-page .sched-diag-chip span {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.sched-page .sched-diag-chip strong {
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #0f172a;
+}
+
+.sched-page .sched-agent-grid thead th {
+  background: var(--cap-accent, #23428e) !important;
+  color: #f8fafc !important;
+  border-bottom-color: var(--cap-accent-mid, #002653);
+}
+
+.sched-page .sched-agent-grid tbody th {
+  background: #f8fafc;
+}
+
+.sched-page .sched-agent-grid__off {
+  color: #94a3b8;
+}
+
+.sched-page .sched-agent-grid__vl {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.sched-page .sched-agent-day-cell {
+  min-width: 6.5rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.35rem;
+}
+
+.sched-page .sched-apply-shrinkage {
+  border: 1px solid #dbe4ef;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  background: #f8fafc;
+}
+
+
+.sched-page .sched-panel {
+  border-color: #dbe4ef;
+}
+
+.sched-page .sched-tabs {
+  background: var(--cap-accent-soft, #edf3f7);
+}
+
+.sched-page .sched-tabs__btn--active {
+  background: #fff;
+  color: var(--cap-accent, #23428e);
+}
+
+.sched-page .exec-dashboard__eyebrow {
+  color: var(--cap-accent, #23428e);
+}
+
+.sched-page .sched-opt {
+  display: grid;
+  gap: 1rem;
+  margin: 0 0 1rem;
+  padding: 1.15rem 1.2rem 1.3rem;
+  border: 1px solid #dbe4ef;
+  border-radius: 16px;
+  background:
+    radial-gradient(900px 160px at 0% 0%, rgba(35, 66, 142, 0.1), transparent 55%),
+    #fff;
+}
+
+.sched-page .sched-opt__hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.sched-page .sched-opt__eyebrow {
+  margin: 0 0 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cap-accent, #23428e);
+}
+
+.sched-page .sched-opt__title {
+  margin: 0 0 0.3rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sched-page .sched-opt__lead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.sched-page .sched-opt__hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sched-page .sched-opt-progress {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid #99f6e4;
+  background: #f0fdfa;
+  color: #115e59;
+  font-size: 0.84rem;
+}
+
+.sched-page .sched-opt-kpis {
+  margin: 0;
+}
+
+.sched-page .sched-opt-split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.85rem;
+}
+
+.sched-page .sched-opt-panel {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.sched-page .sched-opt-panel h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sched-page .sched-opt-card__head {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.sched-page .sched-opt-ok {
+  margin: 0;
+  color: #047857;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.sched-page .sched-opt-alert {
+  margin: 0;
+  color: #9f1239;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.sched-page .sched-opt-sl-meta {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.sched-page .sched-opt-delta--better {
+  color: #047857;
+  font-weight: 700;
+}
+
+.sched-page .sched-opt-delta--worse {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.sched-page .sched-opt-delta--warn {
+  color: #b45309;
+  font-weight: 700;
+}
+
+.sched-page .sched-opt-delta--neutral {
+  color: #64748b;
+}
+
+.sched-page .sched-opt-compare td small,
+.sched-page .sched-opt-compare th small {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.sched-page .sched-opt-compare__col--current {
+  background: #f8fafc;
+}
+
+.sched-page .sched-opt-compare__col--optimized {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.sched-page .sched-opt-compare__col--staffing {
+  background: #f0fdfa;
+  color: #115e59;
+}
+
+.sched-page .sched-opt-rec-table td,
+.sched-page .sched-opt-rec-table th,
+.sched-page .sched-opt-compare td,
+.sched-page .sched-opt-compare th {
+  white-space: normal;
+  vertical-align: top;
+}
+
+.sched-page .sched-opt-rec-table__wrap {
+  max-width: 28rem;
+  text-align: left;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.sched-page .sched-opt-rec-table__impact {
+  color: #4338ca;
+  font-weight: 600;
+}
+
+.sched-page .sched-opt-rec-table__hot {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, #fff 70%);
+}
+
+.sched-page .sched-opt-rec-table td:last-child {
+  white-space: nowrap;
+}

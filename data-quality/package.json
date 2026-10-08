@@ -1,0 +1,49 @@
+{
+  "name": "automation-console",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "dev:clean": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true})}catch(e){}\" && next dev --hostname 127.0.0.1 --port 3000",
+    "build:capacity-embed": "npm run build:embed --prefix capacity",
+    "predev": "node scripts/build-capacity-embed.mjs",
+    "prebuild": "node scripts/build-capacity-embed.mjs",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0",
+    "start:clean": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true})}catch(e){}\" && npm run build && npm run start",
+    "lint": "next lint"
+  },
+  "allowScripts": {
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.11.1": true
+  },
+  "dependencies": {
+    "@vercel/functions": "^3.7.5",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
+    "mysql2": "^3.23.3",
+    "next": "^15.5.15",
+    "papaparse": "^5.5.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "recharts": "^2.15.1",
+    "xlsx": "^0.18.5",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.13.10",
+    "@types/papaparse": "^5.3.15",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "eslint": "^9.22.0",
+    "eslint-config-next": "^15.2.4",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,28 @@
+node_modules
+*.tsbuildinfo
+.next
+.env
+.env.local
+data/uploads/**
+!data/uploads/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+data/watch/**
+!data/watch/.gitkeep
+data/standalone/store.json
+!data/standalone/.gitkeep
+capacity/node_modules
+capacity/dist
+capacity/.env
+capacity/.env.local
+# Local clutter — do not deploy / commit
+*.zip
+**/* - Copy/
+**/* - Copy/**
+capacity/.tmp-*/
+capacity/SmartExcelDashboard.standalone.html
+capacity/fin_movate
+capacity/postcss.config.txt
+supabase/
+# Refresh WinSCP tree with: powershell -File .\scripts\prepare-migration-package.ps1
+# (02-winscp-upload is committed so it can be downloaded from GitHub)

@@ -1,0 +1,58 @@
+{
+  "name": "excel-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "allowScripts": {
+    "esbuild@0.28.0": true,
+    "esbuild@0.27.0": true,
+    "esbuild@0.27.7": true
+  },
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "node scripts/sync-env-local.mjs && npx vercel dev --listen 3001",
+    "dev:sync-env": "node scripts/sync-env-local.mjs",
+    "build": "tsc && vite build",
+    "build:embed": "vite build --config vite.embed.config.ts",
+    "build:api": "node scripts/build-api.mjs",
+    "start": "vite preview --host 0.0.0.0 --port $PORT",
+    "preview": "vite preview",
+    "build:html": "node scripts/build-standalone-html.mjs",
+    "db:setup": "node scripts/db-setup.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/d3": "^7.4.3",
+    "@types/html2canvas": "^0.5.35",
+    "@types/node": "^22.20.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vercel/node": "^5.3.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "esbuild": "^0.28.0",
+    "tailwindcss": "^4.2.4",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.10",
+    "vitest": "3.2.4"
+  },
+  "dependencies": {
+    "mysql2": "^3.23.3",
+    "@tanstack/react-table": "^8.21.3",
+    "bcryptjs": "^2.4.3",
+    "d3": "^7.9.0",
+    "echarts": "^6.0.0",
+    "echarts-for-react": "^3.0.6",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.14.2",
+    "xlsx": "^0.18.5"
+  }
+}

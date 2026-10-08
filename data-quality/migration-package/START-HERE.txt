@@ -1,0 +1,101 @@
+Data Quality Tool + Capacity — migrate with THIS folder only
+
+Use these three folders in order. You do not need the rest of the repo.
+
+────────────────────────────────────────────────────────
+1) SQLyog  →  migration-package/01-sqlyog/
+────────────────────────────────────────────────────────
+Run SQL scripts IN THIS ORDER (Tools → Execute SQL Script):
+
+  1. 001_initial_schema.sql
+  2. 002_capacity_schema.sql
+  3. 004_capacity_users_active.sql
+  4. 005_capacity_users_analyst.sql
+  5. 006_capacity_clients.sql
+  6. 007_capacity_documents.sql
+  7. 008_capacity_audit_and_settings.sql
+  8. 009_drop_ai_assistant_column.sql   (run after the app is built in PuTTY)
+  9. 010_capacity_reporting_views.sql   (read-only views for checking data in SQL)
+ 10. 011_staffing_plan.sql              (Required Production FTE → staffing_plan.required_production_fte)
+ 10b. 012_staffing_plan_normalized.sql   (rename required_hc→required_production_fte + staffing_plan_shrinkage)
+ 10c. 014_staffing_plan_planned_override.sql  (planned_override_json for template volume/AHT/HC)
+ 10d. 015_staffing_plan_actual_override.sql   (actual_override_json — preserve actual weeks)
+ 11. 003_capacity_demo_users.sql
+
+Confirm database name: mis_ph_db
+
+Demo logins (password for all: movate)
+  test@movate.com     admin
+  ben@movate.com      director
+  marian@movate.com   cap_planner
+
+Details: 01-sqlyog/README-SQLyog.txt
+
+────────────────────────────────────────────────────────
+2) WinSCP  →  migration-package/02-winscp-upload/
+────────────────────────────────────────────────────────
+Upload EVERYTHING INSIDE 02-winscp-upload/ to the app server path, e.g.:
+
+  /var/www/Data_Quality_Tool
+
+Do NOT upload secrets from your PC.
+Do NOT upload node_modules or .next.
+
+Details: 02-winscp-upload/README-WinSCP.txt
+
+────────────────────────────────────────────────────────
+3) PuTTY  →  migration-package/03-putty/
+   (same steps are also on the server as SERVER-SETUP.txt)
+────────────────────────────────────────────────────────
+Requirements: Node.js 22.x  |  MariaDB reachable on port 3306
+
+  cd /var/www/Data_Quality_Tool
+  cp .env.production.example .env.local
+  nano .env.local          # set DB_HOST, DB_USER, DB_PASSWORD; COOKIE_SECURE=false for HTTP
+  chmod -R u+rwX data
+  npm install
+  cd capacity && npm install && cd ..
+  npm run build
+  npm run start            # test only — stops when you close PuTTY
+
+Keep it running after logout (recommended):
+  sudo npm install -g pm2
+  pm2 start npm --name data-quality-tool -- start
+  pm2 save
+  pm2 startup              # run the command it prints
+
+Or:  bash server-commands.sh /var/www/Data_Quality_Tool
+
+Behind Nginx? Install 03-putty/nginx-data-quality-tool.conf instead of writing
+your own, and keep PORT in .env.local equal to proxy_pass in that file.
+Getting 502 Bad Gateway? README-PuTTY.txt section 10 tells you which of the
+three causes you have in about a minute.
+
+Details: 03-putty/README-PuTTY.txt
+
+────────────────────────────────────────────────────────
+Redeploying later (updated files)
+────────────────────────────────────────────────────────
+After uploading new files with WinSCP:
+
+  cd /var/www/Data_Quality_Tool
+  npm install
+  cd capacity && npm install && cd ..
+  rm -rf .next
+  npm run build
+  pm2 restart data-quality-tool     # or npm run start
+
+Then hard-refresh the browser once (Ctrl+Shift+R). Each build
+regenerates public/capacity with new chunk names, so a stale
+cached page can otherwise ask for files that no longer exist.
+
+────────────────────────────────────────────────────────
+Smoke checks
+────────────────────────────────────────────────────────
+  http://<server-ip>:3000
+  curl -s http://127.0.0.1:3000/api/capacity/health
+    → database: "connected"
+  curl -s http://127.0.0.1:3000/api/config
+    → dataBackend: "mariadb"
+
+Full notes: migration-package/README.md

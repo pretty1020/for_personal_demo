@@ -1,0 +1,1 @@
+function e(e,t=0){return e==null||!Number.isFinite(e)?`—`:e.toLocaleString(void 0,{maximumFractionDigits:t})}function t(e,t=1){return e==null||!Number.isFinite(e)?`—`:`${(e*100).toFixed(t)}%`}export{t as n,e as t};

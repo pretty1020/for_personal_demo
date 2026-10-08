@@ -1,0 +1,72 @@
+Files in this folder, relative to the app root on the server.
+Generated 2026-09-19 19:57.
+
+     8.5 KB  capacity/api/_lib/clientAdmin.ts
+     5.4 KB  capacity/src/components/planner/CapacityDataUploadPanel.tsx
+    49.1 KB  capacity/src/context/PlannerContext.tsx
+   205.6 KB  capacity/src/pages/AdvancedStaffingCapacityPlanPage.tsx
+    19.7 KB  capacity/src/pages/CapacityPlanSettingsPage.tsx
+    24.3 KB  capacity/src/pages/CapacitySetupWizardPage.tsx
+    43.4 KB  capacity/src/planner/capacityMatrixDisplay.ts
+    82.2 KB  capacity/src/planner/capacityPlanDerived.ts
+    11.6 KB  capacity/src/planner/capacitySetupService.ts
+     7.4 KB  capacity/src/planner/clientRegistry.ts
+     5.5 KB  capacity/src/planner/defaults.ts
+    12.3 KB  capacity/src/planner/persistence.ts
+    19.4 KB  capacity/src/planner/weeklyLedger.ts
+    34.2 KB  public/capacity/avatars/mae.jpg
+ 2,207.4 KB  public/capacity/avatars/mae.png
+   116.5 KB  public/capacity/chunks/AdvancedStaffingCapacityPlanPage-DwA9iLgR.js
+    13.0 KB  public/capacity/chunks/capacityDocuments-CckkCSTB.js
+     1.9 KB  public/capacity/chunks/capacityImportWeek-DOb6iwE9.js
+    44.9 KB  public/capacity/chunks/capacityMatrixDisplay-D6mIVoLs.js
+     7.7 KB  public/capacity/chunks/CapacityPeriodFilter-8da6nxF6.js
+    25.9 KB  public/capacity/chunks/capacityPlanDerived-EcAQoWq_.js
+    24.8 KB  public/capacity/chunks/CapacityPlanSettingsPage-BSFxvnFO.js
+    24.3 KB  public/capacity/chunks/CapacitySetupWizardPage-BsN6ALD8.js
+     2.3 KB  public/capacity/chunks/CapacitySignInForm-hSNnoBMl.js
+     0.4 KB  public/capacity/chunks/CapacitySignInPage-Bar6oVRT.js
+    21.8 KB  public/capacity/chunks/CapacitySummaryPage-C-h_7Auh.js
+     5.4 KB  public/capacity/chunks/companyHierarchy-CAY6CPru.js
+    14.6 KB  public/capacity/chunks/dbeExport-DIEMysCg.js
+    72.8 KB  public/capacity/chunks/DbePage-zn2b8wCn.js
+     4.1 KB  public/capacity/chunks/DemoAccessPage-NJ_6YPmJ.js
+ 1,103.7 KB  public/capacity/chunks/esm-Ph4y4c5e.js
+   412.0 KB  public/capacity/chunks/format-DSJI0EPD.js
+    12.2 KB  public/capacity/chunks/formulaOverrides-BjoRjYdI.js
+     5.0 KB  public/capacity/chunks/FormulaReferencePage-CxN_Hdpl.js
+    12.1 KB  public/capacity/chunks/LeakagePage-T7rZXV3Y.js
+     0.7 KB  public/capacity/chunks/ModulePageHeader-DZ-w7zhD.js
+     0.2 KB  public/capacity/chunks/planIdentity-C9sSxZeh.js
+     2.8 KB  public/capacity/chunks/PlanStartWeekField-JVAV9LgE.js
+     5.2 KB  public/capacity/chunks/staffingPlanSync-CbWqq2g_.js
+     7.0 KB  public/capacity/chunks/UserManagementPage-mJEj0UW0.js
+   228.8 KB  public/capacity/embed.css
+   330.7 KB  public/capacity/embed.js
+     0.8 KB  public/capacity/favicon.svg
+     4.9 KB  public/capacity/icons.svg
+    39.9 KB  public/capacity/movate-logo.png
+   114.7 KB  public/capacity/wfm-commons-logo.png
+     3.9 KB  scripts/build-capacity-embed.mjs
+
+Replaced by this update. Safe to delete on the server (or leave):
+              public/capacity/chunks/AdvancedStaffingCapacityPlanPage-CchKfl0N.js
+              public/capacity/chunks/capacityImportWeek-Dk-yQrQH.js
+              public/capacity/chunks/capacityMatrixDisplay-DQsktEoA.js
+              public/capacity/chunks/CapacityPeriodFilter-BEphbnca.js
+              public/capacity/chunks/capacityPlanDerived-570LHGfe.js
+              public/capacity/chunks/CapacityPlanSettingsPage-DTs-KZ5Q.js
+              public/capacity/chunks/CapacitySetupWizardPage-ClJW_9cd.js
+              public/capacity/chunks/CapacitySignInForm-BqNmD-b3.js
+              public/capacity/chunks/CapacitySignInPage-D79OzmTo.js
+              public/capacity/chunks/CapacitySummaryPage-C7nnjaSG.js
+              public/capacity/chunks/companyHierarchy-CSyx2oji.js
+              public/capacity/chunks/dbeExport-zTCZJzO2.js
+              public/capacity/chunks/DbePage-BmoBOmXM.js
+              public/capacity/chunks/DemoAccessPage-CFbWtAJu.js
+              public/capacity/chunks/esm-D4xsEFfM.js
+              public/capacity/chunks/FormulaReferencePage-ClFpX0Ot.js
+              public/capacity/chunks/LeakagePage-BVsgpuyU.js
+              public/capacity/chunks/ModulePageHeader-DvJ7aj3Z.js
+              public/capacity/chunks/PlanStartWeekField-CfRxTpXB.js
+              public/capacity/chunks/UserManagementPage-CxahfWpB.js

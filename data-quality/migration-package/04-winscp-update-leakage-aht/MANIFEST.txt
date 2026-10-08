@@ -1,0 +1,26 @@
+﻿Files in this folder, relative to the app root on the server.
+Generated 2026-09-09 13:12.
+
+      17.3 KB  capacity/src/components/dbe/DbeFinancialSummaryPanel.tsx
+       286 KB  capacity/src/index.css
+     181.9 KB  capacity/src/pages/AdvancedStaffingCapacityPlanPage.tsx
+      64.7 KB  capacity/src/pages/DbePage.tsx
+        16 KB  capacity/src/pages/LeakagePage.tsx
+      11.3 KB  capacity/src/planner/dbe/dbeExport.ts
+      12.4 KB  capacity/src/planner/dbe/staffingDbeLeakage.test.ts
+      25.5 KB  capacity/src/planner/dbe/staffingDbeLeakage.ts
+       3.4 KB  capacity/src/planner/dbe/staffingMonthDrivers.test.ts
+      13.5 KB  capacity/src/planner/dbe/staffingMonthDrivers.ts
+       1.5 KB  capacity/src/planner/varianceDisplay.test.ts
+     106.1 KB  public/capacity/chunks/AdvancedStaffingCapacityPlanPage-CzjzLdCb.js
+      14.6 KB  public/capacity/chunks/dbeExport-DCjmMx7T.js
+      59.8 KB  public/capacity/chunks/DbePage-Biy35oMb.js
+        10 KB  public/capacity/chunks/LeakagePage-CbfZeqFi.js
+     223.3 KB  public/capacity/embed.css
+     320.8 KB  public/capacity/embed.js
+
+Replaced by this update. Safe to delete on the server, safe to leave:
+              public/capacity/chunks/AdvancedStaffingCapacityPlanPage-CNK4R1jb.js
+              public/capacity/chunks/dbeExport-B_couZEI.js
+              public/capacity/chunks/DbePage-w4l20b2Q.js
+              public/capacity/chunks/LeakagePage-BmD1qISz.js

@@ -1,0 +1,54 @@
+# Staffing Plan MariaDB normalization — deliverable summary
+
+## Root cause of "Staffing plan save failed"
+The PUT `/api/capacity/staffing-plan` path was writing to `staffing_plan.required_hc` / `production_hc`. On servers that never ran `011_staffing_plan.sql`, or after a partial schema, MariaDB threw `ER_NO_SUCH_TABLE` / `ER_BAD_FIELD_ERROR`, which the API wrapped as the generic **"Staffing plan save failed."** The store now maps those errors to actionable 503 messages telling you to run `011` + `012`.
+
+## Root cause of Admin visibility bug
+Summary/Leakage already loaded `scope=all` documents for Manager+, but **Staffing Plan (Capacity Plan)** only listed scenarios from the signed-in user’s local `PlannerContext`. Admin therefore could not pick other planners’ clients in the Client / LOB filters. Combined · All plans was also local-only. Fixed by loading `loadCapacityPortfolio` for Manager+ and merging foreign scenarios (read-only) into the Staffing Plan filters and matrix.
+
+## Terminology rename
+| Old | New |
+|---|---|
+| `required_hc` | `required_production_fte` |
+| `production_hc` | `production_fte` |
+| API `requiredHc` / `productionHc` | `requiredProductionFte` / `productionFte` (legacy aliases still accepted on PUT) |
+| UI | **Required Production FTE** (unchanged label; never "Required HC") |
+
+## Shrinkage Breakdown capture
+1. **Manual input template** — already had `PlannedShrink_*` / `ActualShrink_*` (kept).
+2. **Full workbook / matrix upload** — now parses `PlannedShrink_*` columns and matrix rows like `Absenteeism planned (Not Billable)` into `plannedShrinkageByWeek` → `shrinkageById`.
+3. **ActualShrink_*** — `normalizeImportedActualOverrides` now accepts `shrink` / `shrinkage` tokens after stripping `actual`.
+4. **MariaDB** — planned + actual category % written to `staffing_plan_shrinkage` on every staffing sync (override save + ledger save).
+
+## workspace_state.state usage
+| Usage | Status |
+|---|---|
+| Live writes of staffing / FTE / shrinkage | **None** — workspace PUT remains read-only |
+| Live reads for business data | **None** — only one-time `backfillFromLegacyStorage` when a user has zero `capacity_documents` |
+| Business grid cache | `localStorage` document keys → mirrored to `capacity_documents` (UI read-through cache) |
+| Queryable FTE + Shrinkage | **`staffing_plan` + `staffing_plan_shrinkage` only** |
+
+`workspace_state` is not used for Required Production FTE, Production FTE, or Shrinkage Breakdown.
+
+## SQL to run (SQLyog)
+1. `database/mariadb/011_staffing_plan.sql` (or migration-package copy)
+2. `database/mariadb/012_staffing_plan_normalized.sql` — **required** if an older 011 created `required_hc`
+
+Verify:
+```sql
+SELECT required_production_fte, production_fte FROM staffing_plan LIMIT 20;
+SELECT * FROM staffing_plan_shrinkage LIMIT 20;
+```
+
+## Key files changed
+- `database/mariadb/011_staffing_plan.sql`, `012_staffing_plan_normalized.sql`
+- `capacity/api/_lib/staffingPlanStore.ts`
+- `src/app/api/capacity/staffing-plan/route.ts`
+- `capacity/src/data/staffingPlanSync.ts`, `apiClient.ts`, `capacityDocuments.ts`
+- `capacity/src/planner/capacityWorkbookImport.ts`, `weeklyLedger.ts`, `ledgerPersistence.ts`, `capacityPlanOverridePersistence.ts`, `capacityPlanDerived.ts`
+- `capacity/src/pages/AdvancedStaffingCapacityPlanPage.tsx`, `LeakagePage.tsx` (prior portfolio merge retained)
+- `migration-package/01-sqlyog/*`, `START-HERE.txt`
+- `public/capacity/*` (rebuilt embed)
+
+## Deploy package
+`migration-package/04-winscp-update-staffing-mariadb-normalized`

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="movate" x1="80" y1="420" x2="440" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E53935"/>
+      <stop offset="45%" stop-color="#FFB300"/>
+      <stop offset="100%" stop-color="#E91E8C"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M96 368V176c0-8 6-14 14-14 10 0 18 8 22 18l58 118 58-118c4-10 12-18 22-18 8 0 14 6 14 14v192"
+    stroke="url(#movate)"
+    stroke-width="52"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M248 368V120c0-8 6-14 14-14 10 0 18 8 22 18l58 118 58-118c4-10 12-18 22-18 8 0 14 6 14 14v248"
+    stroke="url(#movate)"
+    stroke-width="52"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

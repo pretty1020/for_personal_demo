@@ -1,0 +1,48 @@
+/** Shared metric display names — aligned with Capacity Plan dashboard vocabulary. */
+export const METRIC_LABELS = {
+  requiredHeadcount: 'Required headcount',
+  beginningProductionHeadcount: 'Beginning production HC',
+  productionHeadcount: 'Production headcount',
+  productionFte: 'Production FTE',
+  hiringHeadcount: 'Hiring headcount',
+  attritionHeadcount: 'Attrition headcount',
+  scheduledHours: 'Scheduled hours',
+  payrollHours: 'Payroll hours',
+  productiveHours: 'Productive hours',
+  otHours: 'OT hours',
+  vtoHours: 'VTO hours',
+  shrinkageInOffice: 'In-office shrinkage hours',
+  shrinkageOutOfOffice: 'Out-of-office shrinkage hours',
+  occupancy: 'Occupancy',
+  productivity: 'Productivity',
+  utilization: 'Utilization',
+  serviceLevel: 'Service level',
+  forecastVolume: 'Forecast volume',
+  revenue: 'Revenue',
+  salaryCost: 'Salary & benefits',
+  trainingCost: 'Training cost',
+  hiringCost: 'Hiring cost',
+  laborCost: 'Labor cost',
+  overtimeCost: 'Overtime cost',
+  opex: 'OPEX',
+  otherCost: 'Other cost',
+  totalCost: 'Total cost',
+  budgetVariance: 'Budget variance',
+  staffingPct: 'Staffing %',
+  /** @deprecated use staffingPct in UI */
+  capacityGap: 'Capacity gap',
+  overUnderStaffing: 'Over / under staffing',
+  grossMargin: 'Gross margin',
+  profitability: 'Profitability',
+  costLeakage: 'Cost leakage',
+  revenueLeakage: 'Revenue leakage',
+  actualTrainingStart: 'Actual training HC start',
+  /** @deprecated use productionHeadcount */
+  scheduledHeadcount: 'Production headcount',
+  /** @deprecated use productionFte */
+  productiveHeadcount: 'Production FTE',
+  /** @deprecated use productionHeadcount */
+  workforceFte: 'Production headcount',
+  /** @deprecated use costLeakage */
+  financialLeakages: 'Cost leakage',
+} as const

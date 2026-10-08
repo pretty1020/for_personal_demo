@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f0f2f5;
+  --background-end: #e8ebf0;
+  --foreground: #1a2332;
+  --card: #ffffff;
+  --card-header: #fafbfc;
+  --muted: #5c6678;
+  --border: #dfe3ea;
+  --border-subtle: #eaedf2;
+  --accent: #b8956a;
+  --accent-light: #d4bc94;
+  --sidebar: #121a28;
+  --sidebar-hover: #1c2738;
+  --brand: #1a3352;
+  --brand-hover: #243f63;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+@layer components {
+  .page-header {
+    @apply relative overflow-hidden rounded-xl border border-[var(--border)] bg-white px-6 py-5 shadow-card;
+  }
+
+  .page-header::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent-light), var(--accent));
+    border-radius: 0.75rem 0 0 0.75rem;
+  }
+
+  .form-input {
+    @apply rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--foreground)] shadow-sm transition placeholder:text-slate-400 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/10;
+  }
+
+  .data-table thead {
+    @apply bg-[var(--card-header)] text-xs font-semibold uppercase tracking-wider text-slate-500;
+  }
+
+  .data-table th {
+    @apply border-b border-[var(--border-subtle)] px-4 py-3 text-left;
+  }
+
+  .data-table td {
+    @apply border-t border-[var(--border-subtle)] px-4 py-3;
+  }
+
+  .data-table tbody tr {
+    @apply transition-colors;
+  }
+
+  .data-table tbody tr:hover {
+    background-color: var(--card-header);
+  }
+
+  .metric-card {
+    @apply relative overflow-hidden rounded-xl border border-[var(--border)] bg-gradient-to-br from-white via-white to-slate-50/80 p-5 shadow-card transition duration-300 hover:-translate-y-0.5 hover:shadow-md;
+  }
+
+  .metric-label {
+    @apply text-[11px] font-semibold uppercase tracking-widest text-slate-500;
+  }
+
+  .metric-value {
+    @apply mt-2 text-3xl font-semibold tabular-nums tracking-tight text-[var(--foreground)];
+  }
+
+  .exec-card {
+    @apply overflow-hidden rounded-xl border border-[var(--border)] bg-white shadow-card;
+  }
+
+  .exec-card-header {
+    @apply border-b border-[var(--border-subtle)] bg-[var(--card-header)] px-5 py-4;
+  }
+
+  .text-link {
+    @apply font-medium text-brand-700 transition hover:text-brand-600 hover:underline;
+  }
+
+  .stat-pill {
+    @apply rounded-lg border border-[var(--border-subtle)] bg-[var(--card-header)] px-4 py-3 text-sm;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}

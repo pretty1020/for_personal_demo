@@ -1,0 +1,15 @@
+* text=auto
+
+# These files are uploaded to the Linux app server by WinSCP and read there.
+# Windows checkouts must not give them CRLF: bash fails a CRLF script with
+# "$'\r': command not found", and a trailing \r on DB_PASSWORD makes the
+# MariaDB connection fail for no visible reason.
+*.sh text eol=lf
+*.conf text eol=lf
+.env.production.example text eol=lf
+.env.example text eol=lf
+
+# Built Capacity embed assets are compared by hash during packaging.
+public/capacity/embed.js text eol=lf
+public/capacity/embed.css text eol=lf
+public/capacity/chunks/** text eol=lf

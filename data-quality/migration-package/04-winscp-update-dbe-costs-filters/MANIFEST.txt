@@ -1,0 +1,43 @@
+﻿Files in this folder, relative to the app root on the server.
+Generated 2026-09-14 16:21.
+
+      70.5 KB  capacity/src/pages/DbePage.tsx
+      15.2 KB  capacity/src/planner/dbe/dbeClientTemplate.test.ts
+      23.8 KB  capacity/src/planner/dbe/dbeClientTemplate.ts
+      38.2 KB  capacity/src/planner/dbe/dbePersistence.ts
+     111.4 KB  public/capacity/chunks/AdvancedStaffingCapacityPlanPage-C1nycgAB.js
+         2 KB  public/capacity/chunks/capacityImportWeek-HLOloQ1o.js
+        27 KB  public/capacity/chunks/capacityMatrixDisplay-DDzzeU3S.js
+       7.7 KB  public/capacity/chunks/CapacityPeriodFilter-CcJPoPW1.js
+      26.2 KB  public/capacity/chunks/capacityPlanDerived-CGo5-H_Z.js
+        24 KB  public/capacity/chunks/CapacityPlanSettingsPage-BxisYdvX.js
+       1.8 KB  public/capacity/chunks/capacityPortfolio-CWb-kvGG.js
+      23.6 KB  public/capacity/chunks/CapacitySetupWizardPage-D6dUdPL2.js
+       2.4 KB  public/capacity/chunks/CapacitySignInForm-Cd0hBBhg.js
+       0.4 KB  public/capacity/chunks/CapacitySignInPage-daoWscLs.js
+      21.8 KB  public/capacity/chunks/CapacitySummaryPage-0q8_BXfl.js
+      21.2 KB  public/capacity/chunks/clientRegistry-DXLBeIng.js
+       5.5 KB  public/capacity/chunks/companyHierarchy-DSYtgtHq.js
+      14.6 KB  public/capacity/chunks/dbeExport-Bv_PHABt.js
+      75.1 KB  public/capacity/chunks/DbePage-BkF-N_3o.js
+      14.3 KB  public/capacity/chunks/dbePersistence-B-p4IxIg.js
+       4.1 KB  public/capacity/chunks/DemoAccessPage-C7HNGy2v.js
+    1103.7 KB  public/capacity/chunks/esm-qaRK8lQV.js
+       412 KB  public/capacity/chunks/format-BwlCifxO.js
+      12.2 KB  public/capacity/chunks/formulaOverrides-CelK4f8f.js
+         5 KB  public/capacity/chunks/FormulaReferencePage-C_TwlJam.js
+        10 KB  public/capacity/chunks/LeakagePage-BFgok2Iy.js
+       0.7 KB  public/capacity/chunks/ModulePageHeader-D1yoXA7Q.js
+       0.2 KB  public/capacity/chunks/planIdentity-BJ0kD2ML.js
+       2.8 KB  public/capacity/chunks/PlanStartWeekField-BXwA-bFA.js
+         7 KB  public/capacity/chunks/UserManagementPage-pZfJlf-5.js
+     228.6 KB  public/capacity/embed.css
+     320.9 KB  public/capacity/embed.js
+
+Replaced by this update. Safe to delete on the server, safe to leave:
+              public/capacity/chunks/capacityPortfolio-NflymVv-.js
+              public/capacity/chunks/CapacitySummaryPage-BsEd_0PK.js
+              public/capacity/chunks/dbeExport-Bc7-gBXX.js
+              public/capacity/chunks/DbePage-CQqOL1Rr.js
+              public/capacity/chunks/dbePersistence-hHoqNZxQ.js
+              public/capacity/chunks/LeakagePage-Cmk45lOg.js

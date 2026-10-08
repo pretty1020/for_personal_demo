@@ -1,0 +1,45 @@
+﻿Files in this folder, relative to the app root on the server.
+Generated 2026-09-17 12:57.
+
+    9.5 KB  capacity/src/data/staffingPlanSync.ts
+  203.5 KB  capacity/src/pages/AdvancedStaffingCapacityPlanPage.tsx
+   38.2 KB  capacity/src/pages/CapacitySummaryPage.tsx
+    9.3 KB  capacity/src/planner/capacityLookup.ts
+   43.4 KB  capacity/src/planner/capacityMatrixDisplay.ts
+   83.0 KB  capacity/src/planner/capacityPlanDerived.ts
+  228.8 KB  public/capacity/embed.css
+  331.3 KB  public/capacity/embed.js
+  115.7 KB  public/capacity/chunks/AdvancedStaffingCapacityPlanPage-DyHJmUVu.js
+   12.6 KB  public/capacity/chunks/capacityDocuments-BAfrr3PN.js
+    1.9 KB  public/capacity/chunks/capacityImportWeek-Dk-yQrQH.js
+   44.9 KB  public/capacity/chunks/capacityMatrixDisplay-CnSoDDl2.js
+    7.7 KB  public/capacity/chunks/CapacityPeriodFilter-BEphbnca.js
+   26.5 KB  public/capacity/chunks/capacityPlanDerived-B43lV8wx.js
+   23.9 KB  public/capacity/chunks/CapacityPlanSettingsPage-DQI2YzH3.js
+   23.6 KB  public/capacity/chunks/CapacitySetupWizardPage-ClJW_9cd.js
+    2.3 KB  public/capacity/chunks/CapacitySignInForm-BqNmD-b3.js
+    0.4 KB  public/capacity/chunks/CapacitySignInPage-D79OzmTo.js
+   21.8 KB  public/capacity/chunks/CapacitySummaryPage-B0kM1bcr.js
+    5.4 KB  public/capacity/chunks/companyHierarchy-CSyx2oji.js
+   14.6 KB  public/capacity/chunks/dbeExport-DiekqPCC.js
+   72.8 KB  public/capacity/chunks/DbePage-CaIZmgCZ.js
+    4.1 KB  public/capacity/chunks/DemoAccessPage-CFbWtAJu.js
+1,103.7 KB  public/capacity/chunks/esm-D4xsEFfM.js
+  412.0 KB  public/capacity/chunks/format-DSJI0EPD.js
+   12.2 KB  public/capacity/chunks/formulaOverrides-BjoRjYdI.js
+    5.0 KB  public/capacity/chunks/FormulaReferencePage-ClFpX0Ot.js
+   12.1 KB  public/capacity/chunks/LeakagePage-Cv3EvlvB.js
+    0.7 KB  public/capacity/chunks/ModulePageHeader-DvJ7aj3Z.js
+    0.2 KB  public/capacity/chunks/planIdentity-C9sSxZeh.js
+    2.8 KB  public/capacity/chunks/PlanStartWeekField-CfRxTpXB.js
+    3.4 KB  public/capacity/chunks/staffingPlanSync-SoH6hZxQ.js
+    7.0 KB  public/capacity/chunks/UserManagementPage-DI9B6fCd.js
+
+Replaced by this update. Safe to delete on the server, safe to leave:
+              public/capacity/chunks/AdvancedStaffingCapacityPlanPage-Dx4-R9B_.js
+              public/capacity/chunks/CapacitySummaryPage-DXDpHjtW.js
+              public/capacity/chunks/CapacitySummaryPage-SAlerAFL.js
+              public/capacity/chunks/capacityPlanDerived-DeRRJ7fI.js
+              public/capacity/chunks/capacityMatrixDisplay-DYWp2hyO.js
+              public/capacity/chunks/staffingPlanSync-CtLknYTB.js
+              public/capacity/chunks/capacityDocuments-B54aa-4z.js

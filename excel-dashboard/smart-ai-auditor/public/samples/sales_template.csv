@@ -1,0 +1,4 @@
+date,hour,item_name,category,quantity,unit_price,line_total,cost
+2026-05-01,9,Latte,Beverage,3,150,450,135
+2026-05-01,10,Americano,Beverage,5,120,600,140
+2026-05-01,11,Croissant,Pastry,4,95,380,168

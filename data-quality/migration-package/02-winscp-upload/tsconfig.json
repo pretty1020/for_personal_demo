@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@capacity-api/*": ["./capacity/api/_lib/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "migration-package",
+    // The Next build must not glob capacity's tree. It is a separate project with its own
+    // tsconfig, its own Vite build and its own devDependencies — vite, @tailwindcss/vite,
+    // @vercel/node. A production server installs without devDependencies, so globbing
+    // capacity/vite.config.ts or the Vercel handlers here failed `npm run build` outright
+    // with "Cannot find module", after Next had already compiled successfully.
+    //
+    // This does not skip the shared code the Next routes depend on: TypeScript still
+    // checks every file reached through an import, so the @capacity-api/* modules
+    // (db, documentStore, auditLog, sharedSettings, userAdmin, clientAdmin) are covered.
+    // Capacity's own sources are checked by `tsc -p capacity/tsconfig.json`.
+    "capacity"
+  ]
+}
