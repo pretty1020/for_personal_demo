@@ -2,8 +2,12 @@ import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import type { NextConfig } from "next";
 
+const portalScript = existsSync("scripts/prepare-portal.mjs")
+  ? "scripts/prepare-portal.mjs"
+  : "data-quality/scripts/prepare-portal.mjs";
+
 if ((process.env.VERCEL === "1" || process.env.PORTAL_STATIC === "1") && !existsSync("public/portal-index.html")) {
-  const prepared = spawnSync("node", ["scripts/prepare-portal.mjs"], { stdio: "inherit" });
+  const prepared = spawnSync("node", [portalScript], { stdio: "inherit" });
   if ((prepared.status ?? 1) !== 0) {
     throw new Error("Portal build failed.");
   }

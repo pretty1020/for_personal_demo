@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "version": 2,
-  "builds": [
-    { "src": "data-quality/package.json", "use": "@vercel/next" }
-  ]
+  "framework": "nextjs",
+  "installCommand": "node scripts/install-site.mjs",
+  "buildCommand": "next build"
 }

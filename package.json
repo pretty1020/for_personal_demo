@@ -1,0 +1,15 @@
+{
+  "name": "for-personal-demo",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "next build"
+  },
+  "dependencies": {
+    "next": "15.5.15",
+    "react": "19.2.5",
+    "react-dom": "19.2.5"
+  }
+}
