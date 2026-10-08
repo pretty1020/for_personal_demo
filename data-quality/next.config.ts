@@ -1,6 +1,48 @@
+import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import type { NextConfig } from "next";
 
+if ((process.env.VERCEL === "1" || process.env.PORTAL_STATIC === "1") && !existsSync("public/portal-index.html")) {
+  const prepared = spawnSync("node", ["scripts/prepare-portal.mjs"], { stdio: "inherit" });
+  if ((prepared.status ?? 1) !== 0) {
+    throw new Error("Portal build failed.");
+  }
+}
+
 const isDev = process.env.NODE_ENV !== "production";
+
+const servePortal = process.env.VERCEL === "1" || process.env.PORTAL_STATIC === "1";
+
+/** Portal screens. /dashboard stays the Data Quality app. */
+const PORTAL_PATHS = [
+  "/workspace",
+  "/workspace/:path*",
+  "/setup",
+  "/executive",
+  "/users",
+  "/formulas",
+  "/capacity-plan",
+  "/capacity-plan/:path*",
+  "/forecasting",
+  "/roster",
+  "/roster/:path*",
+  "/scheduling",
+  "/scheduling/:path*",
+  "/planning",
+  "/planning/:path*",
+  "/financial",
+  "/financial/:path*",
+  "/process-audit",
+  "/governance",
+  "/certified-data",
+  "/anomaly-detection",
+  "/planner/:path*",
+  "/ideal-financial/:path*",
+  "/advanced-staffing-capacity-plan",
+  "/summary",
+  "/dbe/:path*",
+  "/choose",
+];
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -10,12 +52,15 @@ const nextConfig: NextConfig = {
   },
   // Safety net: older Capacity embeds may request /chunks/* instead of /capacity/chunks/*.
   async rewrites() {
-    return [
-      {
-        source: "/chunks/:path*",
-        destination: "/capacity/chunks/:path*",
-      },
-    ];
+    const chunks = { source: "/chunks/:path*", destination: "/capacity/chunks/:path*" };
+    if (!servePortal) return [chunks];
+    return {
+      beforeFiles: [
+        { source: "/", destination: "/portal-index.html" },
+        chunks,
+      ],
+      fallback: PORTAL_PATHS.map((source) => ({ source, destination: "/portal-index.html" })),
+    };
   },
   webpack: (config) => {
     config.resolve ??= {};

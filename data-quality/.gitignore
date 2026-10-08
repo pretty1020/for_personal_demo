@@ -1,4 +1,6 @@
 node_modules
+public/portal-index.html
+public/assets
 *.tsbuildinfo
 .next
 .env

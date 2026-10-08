@@ -8,7 +8,7 @@ import { UserGuideButton, UserGuideModal } from "@/components/user-guide";
 import { useDqAuth } from "@/components/dq-auth-provider";
 import { Button } from "@/components/ui/button";
 
-const PORTAL_URL = process.env.NEXT_PUBLIC_PORTAL_URL ?? "http://127.0.0.1:5173";
+import { PORTAL_URL } from "@/lib/portal-url";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: DashboardIcon },

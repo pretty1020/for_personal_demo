@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
-const DATA_QUALITY_URL = import.meta.env.VITE_DATA_QUALITY_URL ?? 'http://127.0.0.1:3001'
+const DATA_QUALITY_URL =
+  import.meta.env.VITE_DATA_QUALITY_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:3001/dashboard' : '/dashboard')
 
 const MODULES = [
   {

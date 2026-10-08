@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": "22.x"
+    "node": ">=22"
   },
   "scripts": {
     "dev": "next dev",
     "dev:clean": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true})}catch(e){}\" && next dev --hostname 127.0.0.1 --port 3000",
     "build:capacity-embed": "npm run build:embed --prefix capacity",
     "predev": "node scripts/build-capacity-embed.mjs",
-    "prebuild": "node scripts/build-capacity-embed.mjs",
+    "prebuild": "node scripts/prepare-portal.mjs && node scripts/build-capacity-embed.mjs",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "start:clean": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true})}catch(e){}\" && npm run build && npm run start",

@@ -6,7 +6,7 @@ import { MovateLogo } from "@/components/movate-logo";
 import { Button } from "@/components/ui/button";
 import { parseJsonSafe } from "@/lib/api-client";
 
-const PORTAL_URL = process.env.NEXT_PUBLIC_PORTAL_URL ?? "http://127.0.0.1:5173";
+import { PORTAL_URL } from "@/lib/portal-url";
 
 export default function DqLoginPage() {
   const router = useRouter();
