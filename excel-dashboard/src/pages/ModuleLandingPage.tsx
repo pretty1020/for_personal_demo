@@ -58,6 +58,15 @@ const MODULES = [
     href: '/anomaly-detection',
     external: false,
   },
+  {
+    index: '07',
+    kicker: 'One way of working',
+    title: 'Global WFM',
+    copy: 'See the move from 14 local operating models to one blueprint, and the tools that keep 80% of the work the same.',
+    points: ['What we inherit, and the twelve-month picture', 'A Global SOP with a written local exception', 'FTE, seats, and cost from one calculator'],
+    href: '/global-wfm',
+    external: false,
+  },
 ] as const
 
 export function ModuleLandingPage() {
@@ -72,9 +81,10 @@ export function ModuleLandingPage() {
             Trust the data.
           </h1>
           <p className="portal__lead">
-            Six modules, kept separate. Capacity planning holds the forecast and the schedule. Data quality holds the
-            files. Process audit turns local habits into one standard. Governance keeps that standard honest every week.
-            Certified data carries a number from the source to the screen. Anomaly detection marks the point that breaks the pattern.
+            Seven modules, kept separate. Capacity planning holds the forecast and the schedule. Data quality holds the
+            files. Process audit scores the local habits. Global WFM is the blueprint those habits move toward. Governance
+            keeps that standard honest every week. Certified data carries a number from the source to the screen. Anomaly
+            detection marks the point that breaks the pattern.
           </p>
         </header>
 

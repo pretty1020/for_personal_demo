@@ -67,6 +67,9 @@ const CertifiedDataPage = lazy(() =>
 const AnomalyDetectionPage = lazy(() =>
   import('./pages/AnomalyDetectionPage').then((m) => ({ default: m.AnomalyDetectionPage })),
 )
+const GlobalWfmPage = lazy(() =>
+  import('./pages/GlobalWfmPage').then((m) => ({ default: m.GlobalWfmPage })),
+)
 
 function PageFallback() {
   return (
@@ -153,6 +156,14 @@ export default function App() {
         element={
           <Suspense fallback={<PageFallback />}>
             <AnomalyDetectionPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/global-wfm"
+        element={
+          <Suspense fallback={<PageFallback />}>
+            <GlobalWfmPage />
           </Suspense>
         }
       />

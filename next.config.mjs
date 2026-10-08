@@ -34,6 +34,7 @@ const PORTAL_PATHS = [
   '/governance',
   '/certified-data',
   '/anomaly-detection',
+  '/global-wfm',
   '/planner/:path*',
   '/ideal-financial/:path*',
   '/advanced-staffing-capacity-plan',

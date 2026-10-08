@@ -4,6 +4,12 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [tailwindcss(), react()],
+  css: {
+    // Do not walk up to the repo-root PostCSS config. That file is for the Next app and requires tailwindcss, which is not installed for this Vite app. Tailwind here is the Vite plugin.
+    postcss: {
+      plugins: [],
+    },
+  },
   /** Prefer IPv4 loopback so `localhost` (often ::1) does not hit another process on 5178 (e.g. IDE tooling). */
   server: {
     host: '127.0.0.1',
