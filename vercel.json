@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm install --prefix excel-dashboard",
+  "buildCommand": "npm run build --prefix excel-dashboard",
+  "outputDirectory": "excel-dashboard/dist",
+  "framework": null,
+  "rewrites": [
+    { "source": "/((?!api/|assets/)(?!.*\\.).*)", "destination": "/index.html" }
+  ]
+}
