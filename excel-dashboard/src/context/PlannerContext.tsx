@@ -195,6 +195,12 @@ type PlannerContextValue = {
     plannedByWeek: Record<string, WeekCapacityPlanOverride>,
     mode?: 'overwrite' | 'append',
   ) => void
+  /** Write seat inputs that are still blank. Does not lock the week’s other drivers. */
+  fillMissingSeatInputs: (
+    scenarioId: string,
+    plannedByWeek: Record<string, WeekCapacityPlanOverride>,
+    overwrite?: Array<keyof LedgerMetricSnapshot>,
+  ) => void
   selectScenario: (id: string) => void
   createNewScenario: (
     name: string,
@@ -823,6 +829,36 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     [accessSubject, scenarios],
   )
 
+  const fillMissingSeatInputs = useCallback(
+    (scenarioId: string, plannedByWeek: Record<string, WeekCapacityPlanOverride>, overwrite: Array<keyof LedgerMetricSnapshot> = []) => {
+      const scenario = scenarios.find((item) => item.id === scenarioId)
+      if (!scenario || !canEditCapacityPlan(scenario, accessSubject)) return
+      const replace = new Set(overwrite)
+      setCapacityPlanOverrides((prev) => {
+        const scenarioOverrides = { ...(prev[scenarioId] ?? {}) }
+        let changed = false
+        for (const [week, patch] of Object.entries(plannedByWeek)) {
+          const existing = scenarioOverrides[week] ?? {}
+          const nextWeek: WeekCapacityPlanOverride = { ...existing }
+          for (const [key, value] of Object.entries(patch)) {
+            if (value == null || typeof value !== 'number' || Number.isNaN(value)) continue
+            const metricId = key as keyof LedgerMetricSnapshot
+            if (existing[metricId] != null && !replace.has(metricId)) continue
+            if (existing[metricId] === value) continue
+            ;(nextWeek as Record<string, unknown>)[metricId] = value
+            changed = true
+          }
+          scenarioOverrides[week] = nextWeek
+        }
+        if (!changed) return prev
+        const next = { ...prev, [scenarioId]: scenarioOverrides }
+        saveCapacityPlanOverrides(next)
+        return next
+      })
+    },
+    [accessSubject, scenarios],
+  )
+
   const updateForecastOverride = useCallback(
     (scenarioId: string, metricId: ForecastMetricId, weekIndex: number, value: number | null) => {
       setForecastOverrides((prev) => {
@@ -1281,6 +1317,7 @@ export function PlannerProvider({ children }: { children: ReactNode }) {
     updateActualOverrideMetric,
     updatePlannedOverrideMetric,
     applyPlannedWeekOverrides,
+    fillMissingSeatInputs,
     selectScenario,
     createNewScenario,
     cloneScenario,

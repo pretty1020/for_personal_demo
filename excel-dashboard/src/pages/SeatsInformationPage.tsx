@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import ReactECharts from 'echarts-for-react'
 import { usePlanner } from '../context/PlannerContext'
 import type { DerivedCapacityRow } from '../planner/capacityPlanDerived'
@@ -9,10 +9,11 @@ import {
 import { getScenarioAhtOverrides } from '../planner/ahtAnalysisPersistence'
 import { DEFAULT_CAPACITY_FORECAST_MODES } from '../planner/capacityMatrixDisplay'
 import { loadScenarioForecastModes } from '../planner/capacityForecastModesPersistence'
-import { resolveCapacityPlanStartWeek, resolveCurrentCalendarWeek } from '../planner/capacityWeekUtils'
+import { isoDate, resolveCapacityPlanStartWeek, resolveCurrentCalendarWeek } from '../planner/capacityWeekUtils'
 import { rosterHeadcountOverrides } from '../planner/rosterMetrics'
 import { resolvePlanLocation } from '../planner/planIdentity'
 import { scenarioSeatDemand } from '../planner/seatScenario'
+import { legacyVaryingSeatCounts, onsiteIsSampleValue, sampleSeatWeek } from '../planner/sampleSeatFill'
 import type { WeekCapacityPlanOverride } from '../planner/capacityPlanOverridePersistence'
 import type { ScenarioForecastPackage } from '../planner/forecasting'
 import type { PlannerScenario } from '../planner/types'
@@ -108,6 +109,7 @@ export function SeatsInformationPage() {
     getScenarioCapacityPlanOverrides,
     getScenarioRoster,
     getScenarioStageAttritionOverrides,
+    fillMissingSeatInputs,
   } = usePlanner()
   const plans = useMemo(() => scenarios.filter((scenario) => !scenario.isBaseline), [scenarios])
   const clients = useMemo(() => unique(plans.map((scenario) => scenario.plan.client)), [plans])
@@ -163,7 +165,42 @@ export function SeatsInformationPage() {
     getScenarioStageAttritionOverrides,
   ])
 
+  const today = isoDate(new Date())
   const weeks = useMemo(() => mergeWeeks(derived), [derived])
+  const shortWeeks = weeks.filter(
+    (week) => week.seatCount != null && week.demandSeats != null && week.seatCount < week.demandSeats,
+  )
+  const upcomingShort = shortWeeks.filter((week) => week.week >= today)
+  const seatPrompt = upcomingShort.length ? upcomingShort : shortWeeks
+  const seatFilled = useRef(new Set<string>())
+  useEffect(() => {
+    for (const { scenario, rows } of derived) {
+      if (!rows.length || seatFilled.current.has(scenario.id)) continue
+      const existing = getScenarioCapacityPlanOverrides(scenario.id)
+      const patch: Record<string, WeekCapacityPlanOverride> = {}
+      const sorted = [...rows].sort((a, b) => a.week.localeCompare(b.week))
+      const anchor = sampleSeatWeek(sorted.find((row) => (row.planned.productionHc ?? 0) > 0)?.planned.productionHc ?? 0, 0)
+      sorted.forEach((row, index) => {
+        const current = existing[row.week] ?? {}
+        const sample = sampleSeatWeek(row.planned.productionHc, index)
+        if (!sample || !anchor) return
+        if (current.peakRatioPct != null && current.peakRatioPct !== sample.peakRatioPct) return
+        const knownSeats = new Set([...legacyVaryingSeatCounts(row.planned.productionHc), anchor.seatCount])
+        const onsiteIsSample = onsiteIsSampleValue(row.planned.productionHc, index, current.onsiteHc, current.seatCount)
+        const seatIsSample = current.seatCount == null || knownSeats.has(current.seatCount)
+        if (!onsiteIsSample && !seatIsSample) return
+        patch[row.week] = {
+          ...(onsiteIsSample ? { onsiteHc: sample.onsiteHc } : {}),
+          ...(seatIsSample ? { seatCount: anchor.seatCount } : {}),
+          ...(current.wahHc == null ? { wahHc: sample.wahHc } : {}),
+          ...(current.peakRatioPct == null ? { peakRatioPct: sample.peakRatioPct } : {}),
+          ...(current.supportHc == null ? { supportHc: sample.supportHc } : {}),
+        }
+      })
+      seatFilled.current.add(scenario.id)
+      if (Object.keys(patch).length) fillMissingSeatInputs(scenario.id, patch, ['onsiteHc', 'seatCount'])
+    }
+  }, [derived, fillMissingSeatInputs, getScenarioCapacityPlanOverrides])
   const weekIds = weeks.map((week) => week.week)
   const rangeFrom = weekIds.includes(fromWeek) ? fromWeek : weekIds[0] ?? ''
   const pickedTo = weekIds.includes(toWeek) ? toWeek : weekIds[weekIds.length - 1] ?? ''
@@ -439,6 +476,28 @@ export function SeatsInformationPage() {
           )}
         </div>
       </div>
+
+      {seatPrompt.length ? (
+        <section className="seats-prompt" role="status">
+          <p>
+            <strong>Additional seats are needed</strong> for {seatPrompt.length} {seatPrompt.length === 1 ? 'week' : 'weeks'}:{' '}
+            {seatPrompt.slice(0, 8).map((week) => `${week.label} (${formatNumber((week.demandSeats ?? 0) - (week.seatCount ?? 0), 1)} short)`).join(', ')}
+            {seatPrompt.length > 8 ? `, and ${seatPrompt.length - 8} more` : ''}.
+          </p>
+          <button
+            type="button"
+            className="seats-btn"
+            onClick={() => {
+              const first = seatPrompt[0]?.week
+              const last = seatPrompt[seatPrompt.length - 1]?.week
+              if (first) setFromWeek(first)
+              if (last) setToWeek(last)
+            }}
+          >
+            Show these weeks
+          </button>
+        </section>
+      ) : null}
 
       <OutlookTable
         rows={outlook}
@@ -976,8 +1035,10 @@ function safeDerive(
 function mergeWeeks(derived: Array<{ scenario: PlannerScenario; rows: DerivedCapacityRow[] }>): WeekSlice[] {
   const byWeek = new Map<string, WeekSlice[]>()
   derived.forEach(({ scenario, rows }) => {
-    rows.forEach((row) => {
-      const slice = sliceFromRow(row, scenario)
+    const sorted = [...rows].sort((a, b) => a.week.localeCompare(b.week))
+    const anchorSeats = sampleSeatWeek(sorted.find((row) => (row.planned.productionHc ?? 0) > 0)?.planned.productionHc ?? 0, 0)?.seatCount ?? null
+    sorted.forEach((row, index) => {
+      const slice = sliceFromRow(row, scenario, index, anchorSeats)
       const list = byWeek.get(row.week) ?? []
       list.push(slice)
       byWeek.set(row.week, list)
@@ -988,11 +1049,22 @@ function mergeWeeks(derived: Array<{ scenario: PlannerScenario; rows: DerivedCap
     .map(([week, slices]) => combineSlices(week, slices))
 }
 
-function sliceFromRow(row: DerivedCapacityRow, scenario: PlannerScenario): WeekSlice {
+function sliceFromRow(row: DerivedCapacityRow, scenario: PlannerScenario, weekIndex: number | null, anchorSeats: number | null = null): WeekSlice {
   const planned = row.planned
   const hours = positive(planned.productiveHours)
   const hourly = scenario.assumptions.business.hourlySalaryUsd || 0
   const other = scenario.assumptions.business.otherCostUsd || 0
+  const sample = sampleSeatWeek(planned.productionHc, weekIndex)
+  const knownSeats = new Set(legacyVaryingSeatCounts(planned.productionHc))
+  if (anchorSeats != null) knownSeats.add(anchorSeats)
+  const peakIsSample = sample != null && (planned.peakRatioPct == null || planned.peakRatioPct === sample.peakRatioPct)
+  const onsiteIsSample = onsiteIsSampleValue(planned.productionHc, weekIndex, planned.onsiteHc, planned.seatCount)
+  const seatIsSample = planned.seatCount == null || knownSeats.has(planned.seatCount)
+  const onsiteHc = peakIsSample && onsiteIsSample && sample ? sample.onsiteHc : planned.onsiteHc ?? null
+  const wahHc = planned.wahHc ?? (peakIsSample ? sample?.wahHc ?? null : null)
+  const peakRatioPct = planned.peakRatioPct ?? (peakIsSample ? sample?.peakRatioPct ?? null : null)
+  const supportHc = planned.supportHc != null && planned.supportHc > 0 ? planned.supportHc : peakIsSample ? sample?.supportHc ?? planned.supportHc : planned.supportHc
+  const seatCount = peakIsSample && seatIsSample ? anchorSeats ?? sample?.seatCount ?? null : planned.seatCount ?? null
   return {
     week: row.week,
     label: weekLabel(row.week),
@@ -1002,12 +1074,12 @@ function sliceFromRow(row: DerivedCapacityRow, scenario: PlannerScenario): WeekS
     occupancy: unitFraction(planned.occupancy),
     shrinkage: rateOrNull(planned.shrinkagePct),
     productiveHours: hours,
-    seatCount: finiteOrNull(planned.seatCount),
-    supportHc: finiteOrNull(planned.supportHc),
-    peakRatioPct: finiteOrNull(planned.peakRatioPct),
-    onsiteHc: finiteOrNull(planned.onsiteHc),
-    wahHc: finiteOrNull(planned.wahHc),
-    demandSeats: scenarioSeatDemand(planned.productionHc, planned.peakRatioPct, planned.supportHc, planned.onsiteHc),
+    seatCount: finiteOrNull(seatCount),
+    supportHc: finiteOrNull(supportHc),
+    peakRatioPct: finiteOrNull(peakRatioPct),
+    onsiteHc: finiteOrNull(onsiteHc),
+    wahHc: finiteOrNull(wahHc),
+    demandSeats: scenarioSeatDemand(planned.productionHc, peakRatioPct, supportHc, onsiteHc),
     physicalWeeklyCost: other > 0 ? other + hourly * (hours ?? 0) : null,
     virtualWeeklyCost: hourly > 0 ? hourly * 40 : null,
   }

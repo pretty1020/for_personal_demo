@@ -13,6 +13,15 @@ const AdvancedStaffingCapacityPlanPage = lazy(() =>
 const SeatsInformationPage = lazy(() =>
   import('./pages/SeatsInformationPage').then((m) => ({ default: m.SeatsInformationPage })),
 )
+const TalentAcquisitionPage = lazy(() =>
+  import('./pages/PartnerViewsPage').then((m) => ({ default: m.TalentAcquisitionPage })),
+)
+const ItProvisioningPage = lazy(() =>
+  import('./pages/PartnerViewsPage').then((m) => ({ default: m.ItProvisioningPage })),
+)
+const OperationsPartnerPage = lazy(() =>
+  import('./pages/PartnerViewsPage').then((m) => ({ default: m.OperationsPartnerPage })),
+)
 const ForecastingPage = lazy(() =>
   import('./pages/ForecastingPage').then((m) => ({ default: m.ForecastingPage })),
 )
@@ -240,6 +249,36 @@ export default function App() {
             <RequireDemoAuth>
               <Suspense fallback={<PageFallback />}>
                 <SeatsInformationPage />
+              </Suspense>
+            </RequireDemoAuth>
+          }
+        />
+        <Route
+          path="capacity-plan/talent"
+          element={
+            <RequireDemoAuth>
+              <Suspense fallback={<PageFallback />}>
+                <TalentAcquisitionPage />
+              </Suspense>
+            </RequireDemoAuth>
+          }
+        />
+        <Route
+          path="capacity-plan/it"
+          element={
+            <RequireDemoAuth>
+              <Suspense fallback={<PageFallback />}>
+                <ItProvisioningPage />
+              </Suspense>
+            </RequireDemoAuth>
+          }
+        />
+        <Route
+          path="capacity-plan/operations"
+          element={
+            <RequireDemoAuth>
+              <Suspense fallback={<PageFallback />}>
+                <OperationsPartnerPage />
               </Suspense>
             </RequireDemoAuth>
           }
